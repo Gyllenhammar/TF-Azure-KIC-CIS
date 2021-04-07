@@ -52,6 +52,14 @@ variable "vm_name" { default = "k8s"}
 variable "vm_count" { default = 1 }
 variable "vm_size" { default = "Standard_D2_v4"}
 
+# BigIP conf
+variable "bigip_count" { default = 1 }
+variable availabilityZones {
+  description = "If you want the VM placed in an Azure Availability Zone, and the Azure region you are deploying to supports it, specify the numbers of the existing Availability Zone you want to use."
+  type        = list
+  default     = [1]
+}
+
 # Tags
 variable purpose { default = "f5purpose" }
 variable environment { default = "f5env" } #ex. dev/staging/prod

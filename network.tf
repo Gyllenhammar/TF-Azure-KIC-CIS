@@ -2,7 +2,7 @@
 
 # Create virtual net
 resource "azurerm_virtual_network" "main" {
-    name                = "${var.prefix}-network"
+    name                = "${var.prefix}-network-${random_id.id.hex}"
     address_space       = [var.vnet_cidr]
     resource_group_name = azurerm_resource_group.main.name
     location            = azurerm_resource_group.main.location
@@ -28,7 +28,7 @@ resource "azurerm_subnet" "subnet" {
 
 # Create Security group
 resource "azurerm_network_security_group" "subnet" {
-  name                = "${var.prefix}-subnet-nsg"
+  name                = "${var.prefix}-subnet-nsg-${random_id.id.hex}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
@@ -67,6 +67,19 @@ resource "azurerm_network_security_group" "subnet" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
+    source_address_prefix      = var.adminSrcAddr
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "allow_mgmt_access"
+    description                = "Allow management access"
+    priority                   = 140
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8443"
     source_address_prefix      = var.adminSrcAddr
     destination_address_prefix = "*"
   }

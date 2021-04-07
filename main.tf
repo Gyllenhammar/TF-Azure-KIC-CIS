@@ -18,7 +18,7 @@ provider "azurerm" {
 
 # Create a Resource Group
 resource "azurerm_resource_group" "main" {
-    name     = "${var.prefix}_rg"
+    name     = "${var.prefix}_rg_${random_id.id.hex}"
     location = var.location
 
     tags = {
@@ -29,4 +29,11 @@ resource "azurerm_resource_group" "main" {
         costcenter  = var.costcenter
         application = var.application
     }
+}
+
+#
+# Create a random id
+#
+resource random_id id {
+  byte_length = 2
 }
